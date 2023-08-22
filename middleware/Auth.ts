@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 
 
 export const Auth = async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.cookies.token; // Assuming you have middleware to handle cookies
+  const token = req.headers.authorization?.replace('Bearer ', '');
     try {
       if (!token) {
         return res.status(401).json({ error: 'Unauthorized' });

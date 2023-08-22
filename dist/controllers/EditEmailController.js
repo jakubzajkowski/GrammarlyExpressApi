@@ -12,28 +12,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const bcrypt_1 = __importDefault(require("bcrypt"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const schema_1 = __importDefault(require("../db/schema"));
-const LoginController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const EditEmailController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { password, email } = req.body;
+        const { password, email, newEmail } = req.body;
         const user = yield schema_1.default.findOne({ email });
         if (!user) {
-            return res.status(401).json({ error: 'User not found' });
+            return res.json({ error: 'User not found' });
         }
         const isMatch = yield bcrypt_1.default.compare(password, user.password);
         if (!isMatch) {
-            return res.status(401).json({ error: 'Invalid password' });
+            return res.json({ error: 'Invalid password' });
         }
-        const token = jsonwebtoken_1.default.sign({ user }, process.env.JWT_SECRET_TOKEN, {
-            expiresIn: process.env.JWT_SECRET_TOKEN_EXPIRES,
-        });
-        return res.status(200).json({ success: 'Logged Successful', token: token });
+        const emailCheck = yield schema_1.default.findOne({ email: newEmail });
+        if (emailCheck) {
+            return res.json({ error: 'This email is used' });
+        }
+        yield schema_1.default.findOneAndUpdate({ email }, { email: newEmail });
+        return res.json({ status: 'Email changed' });
     }
     catch (error) {
-        console.error('Error:', error);
-        return res.status(500).json({ error: 'Internal Server Error' });
+        console.error(error);
+        return res.status(500).json({ error: 'An error occurred' });
     }
 });
-exports.default = LoginController;
+exports.default = EditEmailController;

@@ -15,7 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Auth = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const Auth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const token = req.cookies.token; // Assuming you have middleware to handle cookies
+    var _a;
+    const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.replace('Bearer ', '');
     try {
         if (!token) {
             return res.status(401).json({ error: 'Unauthorized' });

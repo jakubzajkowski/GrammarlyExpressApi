@@ -12,28 +12,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const bcrypt_1 = __importDefault(require("bcrypt"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const schema_1 = __importDefault(require("../db/schema"));
-const LoginController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const AddDocumentController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { password, email } = req.body;
-        const user = yield schema_1.default.findOne({ email });
-        if (!user) {
-            return res.status(401).json({ error: 'User not found' });
-        }
-        const isMatch = yield bcrypt_1.default.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(401).json({ error: 'Invalid password' });
-        }
-        const token = jsonwebtoken_1.default.sign({ user }, process.env.JWT_SECRET_TOKEN, {
-            expiresIn: process.env.JWT_SECRET_TOKEN_EXPIRES,
+        const { _id } = req.body;
+        yield schema_1.default.findOneAndUpdate({ _id: _id }, {
+            $push: {
+                documents: {
+                    title: 'Untitled Document',
+                    text: '',
+                    status: 'created',
+                    language: 'American English',
+                },
+            },
         });
-        return res.status(200).json({ success: 'Logged Successful', token: token });
+        const document = yield schema_1.default.find({ _id }).select('documents');
+        const documentId = document[0].documents[document[0].documents.length - 1];
+        return res.json({ status: 'added', documentId: documentId._id, _id });
     }
     catch (error) {
-        console.error('Error:', error);
-        return res.status(500).json({ error: 'Internal Server Error' });
+        console.error(error);
+        return res.status(500).json({ error: 'An error occurred' });
     }
 });
-exports.default = LoginController;
+exports.default = AddDocumentController;

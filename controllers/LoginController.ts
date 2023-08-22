@@ -26,14 +26,8 @@ const LoginController = async (req: Request, res: Response) => {
       const token = jwt.sign({ user }, process.env.JWT_SECRET_TOKEN as string, {
         expiresIn: process.env.JWT_SECRET_TOKEN_EXPIRES as string,
       });
-      res.cookie('token', token, {
-        httpOnly: false,
-        maxAge: parseInt(process.env.SESSION_EXPIRES as string),
-        sameSite: 'strict',
-        secure: true,
-      });
   
-      return res.status(200).send('Logged Successful');
+      return res.status(200).json({success:'Logged Successful',token:token});
     } catch (error) {
       console.error('Error:', error);
       return res.status(500).json({ error: 'Internal Server Error' });
