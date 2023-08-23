@@ -12,6 +12,9 @@ const AddDocumentController_1 = __importDefault(require("../controllers/AddDocum
 const DeleteDocumentController_1 = __importDefault(require("../controllers/DeleteDocumentController"));
 const DocumentController_1 = __importDefault(require("../controllers/DocumentController"));
 const EditEmailController_1 = __importDefault(require("../controllers/EditEmailController"));
+const EditNameController_1 = __importDefault(require("../controllers/EditNameController"));
+const EditPasswordController_1 = __importDefault(require("../controllers/EditPasswordController"));
+const LanguageDocumentController_1 = __importDefault(require("../controllers/LanguageDocumentController"));
 const router = express_1.default.Router();
 router.get('/', function (req, res) {
     res.json({ status: 'xd' });
@@ -21,6 +24,9 @@ router.post('/login', LoginController_1.default);
 router.get('/user', Auth_1.Auth, UserController_1.default);
 router.post('/add-document', AddDocumentController_1.default);
 router.post('/delete-document', DeleteDocumentController_1.default);
+router.post('/language-document', LanguageDocumentController_1.default);
 router.get('/document/:_id/:document_id', DocumentController_1.default);
 router.post('/edit-email', EditEmailController_1.default);
+router.post('/edit-name', EditNameController_1.default);
+router.post('/edit-password', EditPasswordController_1.default);
 exports.default = router;
