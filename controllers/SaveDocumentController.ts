@@ -4,21 +4,25 @@ import User from '../db/schema';
 interface RequestBodyType {
     _id: string;
     documentId: string;
-    language: string;
+    title: string;
+    text: string;
   }
 
-const LanguageDocumentController = async (req: Request, res: Response) => {
+const SaveDocumentController = async (req: Request, res: Response) => {
     try {
-      const { _id, documentId, language }: RequestBodyType = req.body;
+      const { _id, documentId, title, text }: RequestBodyType = req.body;
   
       await User.updateOne(
         { _id, "documents._id": documentId },
         {
           $set: {
-            "documents.$.language": language,
+            "documents.$.text": text,
+            "documents.$.title": title,
+            "documents.$.status": 'Work',
           },
         }
       );
+  
       return res.json({ status: 'saved' });
     } catch (error) {
       console.error(error);
@@ -26,4 +30,4 @@ const LanguageDocumentController = async (req: Request, res: Response) => {
     }
   }
 
-export default LanguageDocumentController
+  export default SaveDocumentController

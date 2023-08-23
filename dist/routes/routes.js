@@ -15,6 +15,13 @@ const EditEmailController_1 = __importDefault(require("../controllers/EditEmailC
 const EditNameController_1 = __importDefault(require("../controllers/EditNameController"));
 const EditPasswordController_1 = __importDefault(require("../controllers/EditPasswordController"));
 const LanguageDocumentController_1 = __importDefault(require("../controllers/LanguageDocumentController"));
+const SaveDocumentController_1 = __importDefault(require("../controllers/SaveDocumentController"));
+const SearchDocumentController_1 = __importDefault(require("../controllers/SearchDocumentController"));
+const SynonymsCheckController_1 = __importDefault(require("../controllers/SynonymsCheckController"));
+const TextCheckController_1 = __importDefault(require("../controllers/TextCheckController"));
+const TextTranslateController_1 = __importDefault(require("../controllers/TextTranslateController"));
+const TrashDeleteDocumentController_1 = __importDefault(require("../controllers/TrashDeleteDocumentController"));
+const TrashRestoreDocument_1 = __importDefault(require("../controllers/TrashRestoreDocument"));
 const router = express_1.default.Router();
 router.get('/', function (req, res) {
     res.json({ status: 'xd' });
@@ -26,6 +33,13 @@ router.post('/add-document', AddDocumentController_1.default);
 router.post('/delete-document', DeleteDocumentController_1.default);
 router.post('/language-document', LanguageDocumentController_1.default);
 router.get('/document/:_id/:document_id', DocumentController_1.default);
+router.post('/save-document', SaveDocumentController_1.default);
+router.post('/search-document/:document', SearchDocumentController_1.default);
+router.post('/synonyms-check', SynonymsCheckController_1.default);
+router.post('/text-check', TextCheckController_1.default);
+router.post('/text-translate', TextTranslateController_1.default);
+router.post('/trash-delete-document', TrashDeleteDocumentController_1.default);
+router.post('/trash-restore-document', TrashRestoreDocument_1.default);
 router.post('/edit-email', EditEmailController_1.default);
 router.post('/edit-name', EditNameController_1.default);
 router.post('/edit-password', EditPasswordController_1.default);

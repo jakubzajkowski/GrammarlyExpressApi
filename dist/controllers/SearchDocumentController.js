@@ -13,19 +13,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const schema_1 = __importDefault(require("../db/schema"));
-const LanguageDocumentController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const SearchDocumentController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { _id, documentId, language } = req.body;
-        yield schema_1.default.updateOne({ _id, "documents._id": documentId }, {
-            $set: {
-                "documents.$.language": language,
-            },
-        });
-        return res.json({ status: 'saved' });
+        const { _id } = req.body;
+        const { document } = req.params;
+        if (document) {
+            const user = yield schema_1.default.findOne({ '_id': _id }).select('documents');
+            const filteredDocument = user === null || user === void 0 ? void 0 : user.documents.filter((doc) => doc.title.toLowerCase().includes(document.toLowerCase()));
+            return res.json({ status: 'searched', filteredDocument });
+        }
     }
     catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'An error occurred' });
     }
 });
-exports.default = LanguageDocumentController;
+exports.default = SearchDocumentController;

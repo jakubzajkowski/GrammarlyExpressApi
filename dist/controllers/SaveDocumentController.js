@@ -13,12 +13,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const schema_1 = __importDefault(require("../db/schema"));
-const LanguageDocumentController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const SaveDocumentController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { _id, documentId, language } = req.body;
+        const { _id, documentId, title, text } = req.body;
         yield schema_1.default.updateOne({ _id, "documents._id": documentId }, {
             $set: {
-                "documents.$.language": language,
+                "documents.$.text": text,
+                "documents.$.title": title,
+                "documents.$.status": 'Work',
             },
         });
         return res.json({ status: 'saved' });
@@ -28,4 +30,4 @@ const LanguageDocumentController = (req, res) => __awaiter(void 0, void 0, void 
         return res.status(500).json({ error: 'An error occurred' });
     }
 });
-exports.default = LanguageDocumentController;
+exports.default = SaveDocumentController;
